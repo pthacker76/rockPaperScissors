@@ -1,64 +1,93 @@
-console.log("Howdy");
-
+const computerChoiceDisplay = document.getElementById('computer-choice')
+const userChoiceDisplay = document.getElementById('user-choice')
+const resultDisplay = document.getElementById('result')
+const scoreDisplay = document.getElementById('score')
+const possibleChoices = document.querySelectorAll('button')
+let userChoice
+let computerChoice
+let userScore = 0
+let computerScore = 0
+possibleChoices.forEach(possibleChoice => possibleChoice.addEventListener('click', (e) => {
+    userChoice = e.target.id 
+    userChoiceDisplay.innerText = userChoice
+    generateComputerChoice()
+    getResults()
+    checkScore();
+    scoreDisplay.innerText = "User: " + userScore + " Computer: " + computerScore;
+}))
 function getPlayerChoice() {
     let playerChoice = prompt("Rock, paper, or scissors?");
     return playerChoice;
 }
 function getComputerChoice(){
     let num = Math.floor(Math.random() * 3);
-    if (num == 0){
+    if (num === 0){
         return "rock";
     }
-    else if (num == 1) {
+    else if (num === 1) {
+        return "scissors";
+    }
+    else {
         return "paper";
     }
-    else {
-        return "scissors"
-    }
-    
 }
-function playRound(p,c){
+
+function generateComputerChoice(){
+    const randomNumber = Math.floor(Math.random() * 3)
     
-    console.log("your choice: "+ p + ", Computer: "+ c);
-    if (p.toLowerCase() == c) {
-        return 0;
+    if (randomNumber === 0){
+        computerChoice = 'rock'
     }
-    else if (p.toLowerCase() == 'rock' && c == 'scissors' 
-                || p.toLowerCase() == 'scissors' && c == 'paper' 
-                || p.toLowerCase() == 'paper' && c == 'rock' ){
-        console.log( "You win! " + p + " beats " + c);
-        return 1;
+    else if (randomNumber === 1){
+        computerChoice = 'paper'
     }
     else {
-        console.log("You lose! " + c + " beats "+ p);
+        computerChoice = 'scissors'
+    }
+    computerChoiceDisplay.innerText = computerChoice
+}
+
+function getResults (){
+    if (computerChoice === userChoice){
+        resultDisplay.innerText = "Tie";
+    }
+    else if (computerChoice === 'rock' && userChoice === 'scissors'){
+        resultDisplay.innerText = "Computer Wins";
+        computerScore ++
+    }
+    else if (computerChoice === 'scissors' && userChoice === 'paper'){
+        resultDisplay.innerText= "Computer Wins";
+        computerScore ++
+    }
+    else if (computerChoice === 'paper' && userChoice === 'rock'){
+        resultDisplay.innerText = "Computer Wins";
+        computerScore ++
+    }
+    else if (computerChoice === 'paper' && userChoice === 'scissors') {
+        resultDisplay.innerText = "User Wins";
+        userScore++;
+    }
+    else if (computerChoice === 'scissors' && userChoice === 'rock'){
+        resultDisplay.innerText = "User Wins";
+        userScore++;    
+    }
+    else if (computerChoice === 'rock' && userChoice === 'paper'){
+        resultDisplay.innerText = "User Wins";
+        userScore++;    
     }
 }
-function game() {
-    let playerScore = 0;
-    let computerScore =0;
-    for (let i =1; i<=5; i++){
-        let result = playRound(getPlayerChoice(),getComputerChoice());
-        if (result == 0) {
-            console.log("You tie, both chose same");
-        }
-        else if ( result == 1){
-            playerScore++;
-        }
-        else{
-            computerScore++;
-        }
-        console.log("Score: Computer> " + computerScore + " , Player>" + playerScore);
+function checkScore(){
+    if (userScore === 5){
+        resultDisplay.innerText = "User wins game";
+        userScore = 0;
+        computerScore = 0;
     }
-    if (playerScore > computerScore){
-        console.log("Player wins: " + playerScore+ " - " + computerScore);
-    }
-    else if (computerScore> playerScore){
-        console.log("Computer wins: " + computerScore + " - " + playerScore);
-    }
-    else{
-        console.log("TIE: " + computerScore + " - " + playerScore);
+    else if (computerScore === 5){
+        resultDisplay.innerText = "Computer wins game";
+        userScore = 0;
+        computerScore = 0;
+
     }
 }
-game();
-/*console.log(playRound(playerChoice,getComputerChoice()));*/
+
 
